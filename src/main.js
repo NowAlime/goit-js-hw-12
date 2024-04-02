@@ -2,13 +2,22 @@ import iziToast from "izitoast";
 import "izitoast/dist/css/iziToast.min.css";
 import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
-import { fetchImages } from "./js/pixabay-api.js";
+import { fetchImage } from "./js/pixabay-api";
 import { renderImages } from "./js/render-functions.js";
 
 const input = document.querySelector("input");
 const form = document.querySelector("form");
 const loader = document.querySelector('.loader');
 const galleryList = document.querySelector("ul.gallery");
+
+const buttonLoadMore = document.querySelector(".btn-load-more");
+let inputValue;
+let currentPage = 1;
+let maxPage = 0;
+const perPage = 15;
+
+
+
 function showLoader() {
     loader.classList.remove('hidden');
   }
@@ -18,56 +27,99 @@ function showLoader() {
   }
 
 
+  function showLoadMore() {
+    buttonLoadMore.classList.remove("hidden");
+  }
+  function hideLoadMore() {
+    buttonLoadMore.classList.add("hidden");
+  }
+  
+
   hideLoader();
-
-
-
-  const search = '';
-  let currentPage = 1;
-  const perPage = 15;
-
-
   form.addEventListener("submit",submitHandle);
 
-async function submitHandle (event)  {
+  async function submitHandle (event)  {
     event.preventDefault();
-
-    const search = input.value.trim();
-    currentPage = 1;
+    hideLoadMore();
+    showLoader();
     galleryList.innerHTML = "";
-    
-    if (search  === "") {
-     
-        iziToast.error({
-            color: 'yellow',
-            message: ` Please fill in the field for search`,
-            position: 'topRight',
-        });
-       
-        showLoader();
-        return;
-    }   
+    currentPage = 1;
+    const inputValue = event.target.elements.search.value.trim();
 
-    try {
-  const images = await fetchImages(search, perPage);
-  const totalHits = images.totalHits;
-        if (images.hits.length === 0) {
-            galleryList.innerHTML = "";
-            iziToast.error({
-              message: 'Sorry, there are no images matching your search query. Please try again!',
-              position: 'topRight',
-        }); return;
-          } else {
-            renderImages(images.hits);
-         
-          }
-        } catch (error) {
-          iziToast.error({
-            message: 'Sorry, an error occurred while loading. Please try again!',
+    
+    if (!inputValue) {
+     
+        iziToast.show({
+            message: 'Please complete the field!',
             position: 'topRight',
-          });
-        }
+           
+        });
         hideLoader();
-        form.reset();}
-      
+        return;
+    }
+    try { const data = await fetchImage(inputValue, currentPage);
+        maxPage = Math.ceil(data.totalHits / perPage);
+        if (data.hits.length === 0) {
+          iziToast.error({
+            message: '❌Sorry, there are no images matching your search query. Please try again!',
+            position: 'topRight',
+                });
+
+            } else {
+                renderImages(data.hits);
+                checkButtonStatus();
+              }
+            } catch (error) {
+                iziToast.error({
+                  message: 'Sorry, an error occurred while loading. Please try again!',
+                  position: 'topRight', });
+                }
+                hideLoader();
+                form.reset();
+              }
+
+              
+buttonLoadMore.addEventListener("click", onLoadMore);
+
+async function onLoadMore() {
+  currentPage += 1;
+  hideLoadMore();
+  showLoader();
+
+  try {
+    const data = await fetchImage(inputValue, currentPage);
+    renderImages(data.hits);
+  } catch (error) {
+    iziToast.error({
+      message: 'Sorry, an error occurred while loading. Please try again!',
+      position: 'topRight',
+    });
+
+} hideLoader();
+myScroll();
+checkButtonStatus();
+}
+
+function checkButtonStatus() {
+    if (currentPage >= maxPage) {
+      hideLoadMore();
+      iziToast.info({
+        message: "We're sorry, but you've reached the end of search results.",
+        position: 'topRight',
+    });
+} else {
+    showLoadMore();
+  }
+}
+
+function myScroll() {
+  const height = galleryList.firstChild.getBoundingClientRect().height;
+
+  scrollBy({
+    top: height,
+    behavior: 'smooth',
+  });
+
+  
+}
 
