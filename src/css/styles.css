@@ -104,6 +104,17 @@ font-size: 14px;
   margin-left: -25px;
 }
 
+.btn-load-more {
+  width: 125px;
+  height: 40px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 50px;
+
+  border-top: 8px solid #38db69;
+}
+
 .hidden {
   display: none;}
 
@@ -125,3 +136,15 @@ font-size: 14px;
       transform: rotate(360deg);
     }
   }
+
+
+
+  .load-more-button {
+    width: 125px;
+    height: 40px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 50px;
+  }
+  
