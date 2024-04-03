@@ -82,13 +82,14 @@ function showLoader() {
 buttonLoadMore.addEventListener("click", onLoadMore);
 
 async function onLoadMore() {
-  currentPage += 1;
+  currentPage +=1;
   hideLoadMore();
-  showLoader();
+  
 
   try {
     const data = await fetchImage(inputValue, currentPage);
     renderImages(data.hits);
+    showLoadMore();
   } catch (error) {
     iziToast.error({
       message: 'Sorry, an error occurred while loading. Please try again!',
@@ -96,7 +97,6 @@ async function onLoadMore() {
     });
 
 } hideLoader();
-myScroll();
 checkButtonStatus();
 }
 
@@ -108,18 +108,7 @@ function checkButtonStatus() {
         position: 'topRight',
     });
 } else {
-    showLoadMore();
+    hideLoadMore()
   }
-}
-
-function myScroll() {
-  const height = galleryList.firstChild.getBoundingClientRect().height;
-
-  scrollBy({
-    top: height,
-    behavior: 'smooth',
-  });
-
-  
 }
 
