@@ -53,7 +53,7 @@ hideLoadMore();
                   message: 'Sorry, an error occurred while loading. Please try again!',
                   position: 'topRight', });
                 }
-               showLoader();
+               hideLoader();
                 form.reset();
               }
 
@@ -85,9 +85,11 @@ function checkButtonStatus() {
         message: "We're sorry, but you've reached the end of search results.",
         position: 'topRight',
     });
+
+    hideLoadMore();
 } else {
-    showLoadMore();
-    
+
+  hideLoadMore();
   }
 }
 
