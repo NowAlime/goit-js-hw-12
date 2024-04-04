@@ -9,44 +9,20 @@ const input = document.querySelector("input");
 const form = document.querySelector("form");
 const loader = document.querySelector('.loader');
 const galleryList = document.querySelector("ul.gallery");
-
 const buttonLoadMore = document.querySelector(".btn-load-more");
-let inputValue;
+let inputValue="";
 let currentPage = 1;
 let maxPage = 0;
 const perPage = 15;
-
-
-
-function showLoader() {
-    loader.classList.remove('hidden');
-  }
-  
-  function hideLoader() {
-    loader.classList.add('hidden');
-  }
-
-
-  function showLoadMore() {
-    buttonLoadMore.classList.remove("hidden");
-  }
-  function hideLoadMore() {
-    buttonLoadMore.classList.add("hidden");
-  }
-  
-
-  hideLoader();
-
+hideLoader();
+hideLoadMore();
   form.addEventListener("submit",submitHandle);
 
   async function submitHandle (event)  {
     event.preventDefault();
-    hideLoadMore();
-    showLoader();
     galleryList.innerHTML = "";
     currentPage = 1;
-    const inputValue = event.target.elements.search.value.trim();
-
+   inputValue = event.target.elements.search.value.trim();
     
     if (!inputValue) {
      
@@ -55,7 +31,7 @@ function showLoader() {
             position: 'topRight',
            
         });
-        hideLoader();
+        hideLoadMore();
         return;
     }
     try { const data = await fetchImage(inputValue, currentPage);
@@ -69,13 +45,15 @@ function showLoader() {
             } else {
                 renderImages(data.hits);
                 checkButtonStatus();
+                hideLoadMore();
+              
               }
             } catch (error) {
                 iziToast.error({
                   message: 'Sorry, an error occurred while loading. Please try again!',
                   position: 'topRight', });
                 }
-                hideLoader();
+                showLoadMore();
                 form.reset();
               }
 
@@ -97,19 +75,34 @@ async function onLoadMore() {
       position: 'topRight',
     });
 
-} hideLoader();
+} showLoadMore();
 checkButtonStatus();
 }
 
 function checkButtonStatus() {
     if (currentPage >= maxPage) {
-      hideLoadMore();
+      showLoadMore();
       iziToast.info({
         message: "We're sorry, but you've reached the end of search results.",
         position: 'topRight',
     });
 } else {
-    hideLoadMore()
+    hideLoadMore();
   }
 }
 
+function showLoader() {
+  loader.classList.remove('hidden');
+}
+
+function hideLoader() {
+  loader.classList.add('hidden');
+}
+
+
+function showLoadMore() {
+  buttonLoadMore.classList.remove("hidden");
+}
+function hideLoadMore() {
+  buttonLoadMore.classList.add("hidden");
+}

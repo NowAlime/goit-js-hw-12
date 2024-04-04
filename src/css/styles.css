@@ -88,12 +88,6 @@ font-size: 14px;
   height: 160px;
 }
 
-
-
-
-.hidden {
-  display: none;}
-
   .loader {
     border: 8px double #d2ecaa;
     border-radius: 50%;
@@ -108,9 +102,6 @@ font-size: 14px;
     margin-top: -25px;
     margin-left: -25px;
   }
-  
-  .hidden {
-    display: none;}
   
   
     @-webkit-keyframes spin {
@@ -131,7 +122,6 @@ font-size: 14px;
       }
     }
 
-
 .btn-load-more{
   background-color: #4eff63;
  color: #FFFFFF;
@@ -142,3 +132,6 @@ font-size: 14px;
   margin-right: auto;
   margin-top: 50px;
 }
+
+.hidden {
+  display: none;}
