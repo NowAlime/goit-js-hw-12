@@ -36,6 +36,7 @@ function showLoader() {
   
 
   hideLoader();
+
   form.addEventListener("submit",submitHandle);
 
   async function submitHandle (event)  {

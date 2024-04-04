@@ -1,10 +1,10 @@
 import axios from "axios";
 
-export async function fetchImage( inputValue, currentPage) {
+export async function fetchImage( valueInput, currentPage) {
   const BASE_URL = "https://pixabay.com/api/"
   const params = {
     key: "43075807-09317d918fe027bf1568df9fe",
-    q: inputValue,
+    q: valueInput,
     image_type: "photo",
     orientation: "horizontal",
     safesearch: true,
