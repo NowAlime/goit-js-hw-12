@@ -31,7 +31,7 @@ hideLoadMore();
             position: 'topRight',
            
         });
-        hideLoadMore();
+        hideLoader();
         return;
     }
     try { const data = await fetchImage(inputValue, currentPage);
@@ -41,11 +41,11 @@ hideLoadMore();
             message: '❌Sorry, there are no images matching your search query. Please try again!',
             position: 'topRight',
                 });
-
+                hideLoadMore();
             } else {
                 renderImages(data.hits);
                 checkButtonStatus();
-                hideLoadMore();
+                showLoadMore();
               
               }
             } catch (error) {
@@ -53,7 +53,7 @@ hideLoadMore();
                   message: 'Sorry, an error occurred while loading. Please try again!',
                   position: 'topRight', });
                 }
-                showLoadMore();
+               showLoader();
                 form.reset();
               }
 
@@ -62,32 +62,32 @@ buttonLoadMore.addEventListener("click", onLoadMore);
 
 async function onLoadMore() {
   currentPage +=1;
-  hideLoadMore();
+ showLoader();
   
 
   try {
     const data = await fetchImage(inputValue, currentPage);
     renderImages(data.hits);
-    showLoadMore();
+    showLoader();
   } catch (error) {
     iziToast.error({
       message: 'Sorry, an error occurred while loading. Please try again!',
       position: 'topRight',
     });
 
-} showLoadMore();
+} hideLoader();
 checkButtonStatus();
 }
 
 function checkButtonStatus() {
     if (currentPage >= maxPage) {
-      showLoadMore();
       iziToast.info({
         message: "We're sorry, but you've reached the end of search results.",
         position: 'topRight',
     });
 } else {
-    hideLoadMore();
+    showLoadMore();
+    
   }
 }
 
